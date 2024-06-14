@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <div class="profile-header">
+        <img src="{{ url_for('static', filename='img/user.png') }}" alt="User Icon" class="user-icon">
+        <h2>{% block title %}Perfil de {{ user_id.username }} {% endblock %}</h2>
+    </div>
+{% endblock %}
+
+{% block content %}
+<h1>Todas las publicaciones</h1>
+{% for post in posts %}   
+<article class="post">
+    <header>
+        <h3 class="titulo-post">{{ post.title }}</h3>
+    </header>
+    <div class="post-content">
+        <p>{{ post.body | safe }}</p>
+    </div>
+    <div class="post-meta">
+        <a href="{{ url_for('blog.profile', id=post.author) }}" class="author-link">Autor: {{ get_user(post.author).username }}</a>
+        Fecha: {{ post.created.strftime('%d-%m-%Y') }}
+        <div class="post-actions">
+            {% if g.user.id == post.author %}
+            <a href="{{ url_for('blog.delete', id=post.id) }}" class="button">Eliminar</a>
+            <a href="{{ url_for('blog.update', id=post.id) }}" class="button">Editar</a>
+            {% endif %}
+        </div>
+    </div>
+</article>
+{% endfor %}
+{% endblock %}
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('.ckeditor'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block header %}
+    <h2>{% block title %}Publicaciones {% endblock %}</h2>
+    {% if g.user %}
+        <a href="{{ url_for('blog.create') }}" class="button">Publicar algo</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% for post in posts %}   
+        <article class="post">
+            <header>
+                <div>
+                    <h3 class="titulo-post">{{ post.title }}</h3>
+                </div>
+
+            </header>
+            <div class="post-content ckeditor">
+                {{ post.body | safe }}
+                <hr>
+                <div class="post-meta">
+                    Fecha: {{ post.created.strftime('%d-%m-%Y') }}
+                    <a href="{{ url_for('blog.profile', id=post.author) }}" class="author-link">Autor: {{ get_user(post.author).username }}</a>
+                    <div class="post-actions">
+                        {% if g.user.id == post.author %}
+                        <a href="{{ url_for('blog.delete', id=post.id) }}" class="button">Eliminar</a>
+                        <a href="{{ url_for('blog.update', id=post.id) }}" class="button">Editar</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </article>
+    {% endfor %}
+{% endblock %}
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('.ckeditor'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>

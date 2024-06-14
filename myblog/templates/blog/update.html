@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block header %}
+    <h2>{% block title %}Actualizar una publicación {% endblock %}</h2>
+{% endblock %}
+
+{% block content %}
+    <form method="POST">
+        <label for="title">Título</label>
+        <input type="text" name="title" id="title" value="{{ post.title }}" required>
+        <label for="body">Contenido</label>
+        <textarea name="body" id="body" cols="30" rows="10">{{ post.body | safe }}</textarea>
+        <input type="submit", value="Editar">
+    </form>
+    <!-- Agregar CKEditor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/translations/es.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#body'), {
+                language: 'es',
+                toolbar: {
+                    items: [
+                        'heading',
+                        '|',
+                        'bold',
+                        'italic',
+                        'underline',
+                        'strikethrough',
+                        '|',
+                        'numberedList',
+                        'bulletedList',
+                        '|',
+                        '|',
+                        'link',
+                        'insertTable',
+                        'blockQuote',
+                        '|',
+                        'undo',
+                        'redo'
+                    ]
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+{% endblock %}
